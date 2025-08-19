@@ -6,10 +6,13 @@ email: olikportesova@seznam.cz
 """
 import random
 
-# function to create a secret 4-digit number
+lenght = 4
+separator = "-" * 47
+
+
 def generate_secret_number():
     """
-    generation of non-repeating numbers
+    generating a secret number
     the first number must not start with a zero
     converting to string
     subsequent concatenation of numbers into one string
@@ -22,13 +25,13 @@ def generate_secret_number():
 
     other_numbers = random.sample(numbers, 3)
 
-    secret_numbers = ([first_number] + other_numbers)
+    secret_numbers = [first_number] + other_numbers
 
     secret_number = [str(cislo) for cislo in secret_numbers]
     secret_number = "".join(secret_number)
     return secret_number
 
-# condition check function
+
 def validate_tip(user_tip):
     """
     list of conditions
@@ -37,7 +40,7 @@ def validate_tip(user_tip):
     if not user_tip.isdigit():
         print("Enter numbers only.")
         return False
-    elif len(user_tip) != 4:
+    elif len(user_tip) != lenght:
         print("Enter a four-digit number.")
         return False
     elif user_tip[0] == "0":
@@ -48,7 +51,7 @@ def validate_tip(user_tip):
         return False
     return True
 
-# cow and bull counting function
+
 def evaluate_guess(guess, secret):
     """
     if the guessed number is in the same place as the secret number, a bull is added
@@ -56,52 +59,54 @@ def evaluate_guess(guess, secret):
     """
     bulls = 0
     cows = 0
-    for x in range(4):
+    for x in range(lenght):
         if guess[x] == secret[x]:
             bulls += 1
-        if guess[x] in secret:
+        if guess[x] in secret and guess[x] != secret[x]:
             cows += 1
     return (bulls, cows)
 
 
-# greeting the user
-print("Hi there!")
-print("-" * 47)
+def main():
+    """
+    main function to run bulls and cows game
+    """
 
+    # greeting the user
+    print("Hi there!")
+    print(separator)
 
-# writing the introductory text
-print("I've generated a random 4 digit number for you.")
-print("Let's play a bulls and cows game.")
-print("-" * 47)
+    # writing the introductory text
+    print("I've generated a random 4 digit number for you.")
+    print("Let's play a bulls and cows game.")
+    print(separator)
 
+    # generating a secret number
+    secret = generate_secret_number()
 
-# generating a secret number
-secret = generate_secret_number()
+    # pre-arrangement of variables
+    attempts = 0
+    bulls = 0
 
-# pre-arrangement of variables
-attempts = 0
-bulls = 0
-first_quest = True
+    print("Enter a number:")
+    print(separator)
 
-# main game loop
-# entering the guessed number
-# deciding whether it is a bull or a cow
-# the game ends when there are four bulls
-while bulls != 4:
-    if first_quest:
-        print("Enter a number:")
-        print("-" * 47)
-        first_quest = False
-    user_tip = input(">>> ")
-    while not validate_tip(user_tip):
-        print("-" * 47)
+    # main game loop
+    while bulls != lenght:
         user_tip = input(">>> ")
-    attempts += 1
-    bulls, cows = evaluate_guess(user_tip, secret)
-    print(f"{bulls} bull{"s" if bulls != 1 else ""}, {cows} cow{"s" if cows != 1 else ""}")
-    print("-" * 47)
-    if bulls == 4:
-        print(f"Correct, you've guessed the right number in")
-        print(f"{attempts} guesses!")
-        print("-" *47)
-        print("That's amazing!")
+        if not validate_tip(user_tip):
+            print(separator)
+            continue
+        attempts += 1
+        bulls, cows = evaluate_guess(user_tip, secret)
+        print(f"{bulls} bull{"s" if bulls != 1 else ""}, {cows} cow{"s" if cows != 1 else ""}")
+        print(separator)
+        if bulls == lenght:
+            print(f"Correct, you've guessed the right number in")
+            print(f"{attempts} guesses!")
+            print(separator)
+            print("That's amazing!")
+
+
+if __name__ == "__main__":
+    main()
