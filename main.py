@@ -6,7 +6,7 @@ email: olikportesova@seznam.cz
 """
 import random
 
-lenght = 4
+length = 4
 separator = "-" * 47
 
 
@@ -23,7 +23,7 @@ def generate_secret_number():
     first_number = random.choice(first_numbers)
     numbers.remove(first_number)
 
-    other_numbers = random.sample(numbers, 3)
+    other_numbers = random.sample(numbers, length - 1)
 
     secret_numbers = [first_number] + other_numbers
 
@@ -40,7 +40,7 @@ def validate_tip(user_tip):
     if not user_tip.isdigit():
         print("Enter numbers only.")
         return False
-    elif len(user_tip) != lenght:
+    elif len(user_tip) != length:
         print("Enter a four-digit number.")
         return False
     elif user_tip[0] == "0":
@@ -59,7 +59,7 @@ def evaluate_guess(guess, secret):
     """
     bulls = 0
     cows = 0
-    for x in range(lenght):
+    for x in range(length):
         if guess[x] == secret[x]:
             bulls += 1
         if guess[x] in secret and guess[x] != secret[x]:
@@ -92,7 +92,7 @@ def main():
     print(separator)
 
     # main game loop
-    while bulls != lenght:
+    while bulls != length:
         user_tip = input(">>> ")
         if not validate_tip(user_tip):
             print(separator)
@@ -101,7 +101,7 @@ def main():
         bulls, cows = evaluate_guess(user_tip, secret)
         print(f"{bulls} bull{"s" if bulls != 1 else ""}, {cows} cow{"s" if cows != 1 else ""}")
         print(separator)
-        if bulls == lenght:
+        if bulls == length:
             print(f"Correct, you've guessed the right number in")
             print(f"{attempts} guesses!")
             print(separator)
